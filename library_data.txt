@@ -1,0 +1,72 @@
+BOOKS
+id=101
+title=The Name of the Wind
+author=Patrick Rothfuss
+available=true
+
+id=102
+title=Pachinko
+author=Min Jin Lee
+available=true
+
+id=103
+title=Project Hail Mary
+author=Andy Weir
+available=true
+
+id=104
+title=Normal People
+author=Sally Rooney
+available=true
+
+id=105
+title=The Secret History
+author=Donna Tartt
+available=true
+
+id=106
+title=Sapiens
+author=Yuval Noah Harari
+available=true
+
+id=107
+title=Mexican Gothic
+author=Silvia Moreno-Garcia
+available=true
+
+id=108
+title=The Remains of the Day
+author=Kazuo Ishiguro
+available=true
+
+id=109
+title=Recursion
+author=Blake Crouch
+available=true
+
+id=110
+title=A Gentleman in Moscow
+author=Amor Towles
+available=true
+
+STUDENTS
+id=100
+name=Noah
+borrowed=
+
+id=1
+name=Brian
+borrowed=
+
+id=2
+name=James
+borrowed=
+
+id=17
+name=Jada
+borrowed=
+
+id=16
+name=Marie
+borrowed=
+
