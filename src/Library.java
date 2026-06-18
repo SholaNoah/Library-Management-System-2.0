@@ -1,5 +1,7 @@
 import java.io.File;
 import java.io.FileWriter;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -15,11 +17,14 @@ class Library {
 // Attributes
 private ArrayList<Book> books; // Collection of books in the library
 private ArrayList<Student> students; // Collection of students registered in the library
+private ArrayList<BorrowRecord> borrowRecords; // Collection of borrowing records in the library
+
 
 // Constructor
 public Library() {
     books = new ArrayList<>();
-    students = new ArrayList<>();   
+    students = new ArrayList<>();
+    borrowRecords = new ArrayList<>();
 }
 
 // Methods
@@ -75,38 +80,69 @@ public Book findBookById(int id) {
 }
 
 // Borrow a book
-public boolean borrowBook(int studentId, int bookId) {
+public boolean borrowBook(int studentId, int bookId, LocalDate borrowDate) {
     Student student = findStudentById(studentId);
     Book book = findBookById(bookId);
 
     if (student != null && book != null) {
-        if (book.borrowBook()) { // Attempt to borrow the book
-            student.borrowBook(book); // Add the book to the student's borrowed list
-            System.out.println(student.getName() + " has borrowed " + book.getTitle());
-            return true; // Borrowing successful
+        if (book.borrowBook()) {
+
+            BorrowRecord record = new BorrowRecord(student, book, borrowDate);
+            borrowRecords.add(record);
+
+            student.getBorrowedBooks().add(book);
+
+            System.out.println(student.getName() + " borrowed " + book.getTitle() +
+                               " (Due: " + record.getDueDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) + ")");
+            return true;
         } else {
-            System.out.println("Sorry, " + book.getTitle() + " is currently not available.");
-            return false; // Book is not available
+            System.out.println("Sorry, " + book.getTitle() + " is not available.");
+            return false;
         }
     } else {
         System.out.println("Invalid student ID or book ID.");
-        return false; // Invalid IDs
+        return false;
     }
 }
 
+
 // Return a book
-public void returnBook(int studentId, int bookId) {
+public void returnBook(int studentId, int bookId, LocalDate returnDate) {
     Student student = findStudentById(studentId);
     Book book = findBookById(bookId);
 
     if (student != null && book != null) {
-        student.returnBook(book); // Remove the book from the student's borrowed list
-        book.returnBook(); // Mark the book as available
-        System.out.println(student.getName() + " has returned " + book.getTitle());
-    } else {
-        System.out.println("Invalid student ID or book ID.");
+
+        BorrowRecord record = null;
+        for (BorrowRecord r : borrowRecords) {
+            if (r.getStudent() == student && r.getBook() == book && !r.isReturned()) {
+                record = r;
+                break;
+            }
+        }
+
+        if (record == null) {
+            System.out.println("No active borrow record found for this book.");
+            return;
+        }
+
+        int fee = LateFeeCalculator.calculateLateFee(record.getDueDate(), returnDate);
+
+        record.markReturned(returnDate, fee);
+
+        student.getBorrowedBooks().remove(book);
+        book.returnBook();
+
+        System.out.println(student.getName() + " returned " + book.getTitle());
+        if (fee > 0) {
+            System.out.println("Late fee: £" + fee);
+        }
+        return;
     }
+
+    System.out.println("Invalid student ID or book ID.");
 }
+
 
 // Display all books in the library
 public void displayAllBooks() {
@@ -126,11 +162,34 @@ public void displayAllStudents() {
     }
 }
 
+// Display all borrow records in the library
+public void displayAllBorrowedBooks() {
+    System.out.println("\n===== All Borrowed Books =====");
+
+    boolean found = false;
+
+    for (BorrowRecord record : borrowRecords) {
+        if (!record.isReturned()) {
+            found = true;
+
+            System.out.println("- " + record.getBook().getTitle()
+                + " | Borrowed by: " + record.getStudent().getName()
+                + " | Due: " + record.getDueDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+        }
+    }
+
+    if (!found) {
+        System.out.println("No books are currently borrowed.");
+    }
+}
+
+
 // Save data to a file
 public void saveData() {
     try {
         FileWriter writer = new FileWriter("library_data.txt");
 
+        // Save books
         writer.write("BOOKS\n");
         for (Book book : books) {
             writer.write("id=" + book.getBookID() + "\n");
@@ -139,6 +198,7 @@ public void saveData() {
             writer.write("available=" + book.isAvailable() + "\n\n");
         }
 
+        // Save students
         writer.write("STUDENTS\n");
         for (Student student : students) {
             writer.write("id=" + student.getStudentID() + "\n");
@@ -157,6 +217,19 @@ public void saveData() {
 
             writer.write("borrowed=" + borrowed + "\n\n");
         }
+
+        // Save borrow records
+        writer.write("BORROW_RECORDS\n");
+        for (BorrowRecord r : borrowRecords) {
+        writer.write("studentId=" + r.getStudent().getStudentID() + "\n");
+        writer.write("bookId=" + r.getBook().getBookID() + "\n");
+        writer.write("borrowDate=" + r.getBorrowDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) + "\n");
+        writer.write("dueDate=" + r.getDueDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) + "\n");
+        writer.write("returned=" + r.isReturned() + "\n");
+        writer.write("returnDate=" + (r.getReturnDate() == null ? "" : r.getReturnDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))) + "\n");
+        writer.write("lateFee=" + r.getLateFee() + "\n\n");
+        }
+
 
         writer.close();
         System.out.println("Data saved successfully.");
@@ -190,6 +263,10 @@ public void loadData() {
             }
             if (line.equals("STUDENTS")) {
                 section = "STUDENTS";
+                continue;
+            }
+            if (line.equals("BORROW_RECORDS")) {
+                section = "BORROW_RECORDS";
                 continue;
             }
             if (line.isEmpty()) continue;
@@ -228,8 +305,38 @@ public void loadData() {
                     }
                 }
             }
-        }
 
+            if (section.equals("BORROW_RECORDS")) {
+                if (line.startsWith("studentId=")) {
+                    int studentId = Integer.parseInt(line.substring(10));
+                    int bookId = Integer.parseInt(reader.nextLine().substring(7));
+
+                    LocalDate borrowDate = LocalDate.parse(reader.nextLine().substring(11), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+                    LocalDate dueDate = LocalDate.parse(reader.nextLine().substring(8), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+
+                    boolean returned = Boolean.parseBoolean(reader.nextLine().substring(9));
+
+                    String returnDateStr = reader.nextLine().substring(11);
+                    LocalDate returnDate = returnDateStr.isEmpty() ? null : LocalDate.parse(returnDateStr, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+
+                    int lateFee = Integer.parseInt(reader.nextLine().substring(8));
+
+                    Student student = findStudentById(studentId);
+                    Book book = findBookById(bookId);
+
+                    BorrowRecord record = new BorrowRecord(student, book, borrowDate);
+                    record.setDueDate(dueDate);
+
+
+                    if (returned) {
+                        record.markReturned(returnDate, lateFee);
+                    }
+
+                    borrowRecords.add(record);
+                }
+            }
+
+        }
         reader.close();
         System.out.println("Data loaded successfully.");
     } catch (Exception e) {
