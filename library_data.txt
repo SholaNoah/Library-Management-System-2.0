@@ -32,7 +32,7 @@ available=true
 id=107
 title=Mexican Gothic
 author=Silvia Moreno-Garcia
-available=true
+available=false
 
 id=108
 title=The Remains of the Day
@@ -42,17 +42,22 @@ available=true
 id=109
 title=Recursion
 author=Blake Crouch
-available=true
+available=false
 
 id=110
 title=A Gentleman in Moscow
 author=Amor Towles
+available=false
+
+id=111
+title=The Art of War
+author=Sun Tzu
 available=true
 
 STUDENTS
 id=100
 name=Noah
-borrowed=
+borrowed=107
 
 id=1
 name=Brian
@@ -68,5 +73,30 @@ borrowed=
 
 id=16
 name=Marie
-borrowed=
+borrowed=110,109
+
+BORROW_RECORDS
+studentId=16
+bookId=110
+borrowDate=17/06/2026
+dueDate=01/07/2026
+returned=false
+returnDate=
+lateFee=0
+
+studentId=16
+bookId=109
+borrowDate=15/06/2026
+dueDate=29/06/2026
+returned=false
+returnDate=
+lateFee=0
+
+studentId=100
+bookId=107
+borrowDate=24/06/2026
+dueDate=08/07/2026
+returned=false
+returnDate=
+lateFee=0
 

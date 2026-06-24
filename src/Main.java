@@ -36,8 +36,9 @@ class Main {
             System.out.println("6. Display all students");
             System.out.println("7. Display all books");
             System.out.println("8. Save data");
-            System.out.println("9. Load data");
+            System.out.println("9. Search");
             System.out.println("10. Exit");
+            
 
             System.out.print("Enter your choice: ");
             choice = scanner.nextInt();
@@ -115,8 +116,46 @@ class Main {
                     break;
 
                 case 9:
-                    library.loadData();
-                    break;
+                    System.out.println("\nSearch by:");
+                    System.out.println("1. Book Title");
+                    System.out.println("2. Book Author");
+                    System.out.println("3. Student Name");
+                    System.out.println("4. Book ID");
+                    System.out.print("Enter choice: ");
+
+                    int searchChoice = scanner.nextInt();
+                    scanner.nextLine();
+
+                        switch (searchChoice) {
+                            case 1:
+                                System.out.print("Enter book title: ");
+                                String titleSearch = scanner.nextLine();
+                                library.searchBookByTitle(titleSearch);
+                                break;
+
+                            case 2:
+                                System.out.print("Enter author name: ");
+                                String authorSearch = scanner.nextLine();
+                                library.searchBookByAuthor(authorSearch);
+                                break;
+
+                            case 3:
+                                System.out.print("Enter student name: ");
+                                String studentSearch = scanner.nextLine();
+                                library.searchStudent(studentSearch);
+                                break;
+
+                            case 4:
+                                System.out.print("Enter book ID: ");
+                                int bookIdSearch = scanner.nextInt();
+                                scanner.nextLine();
+                                library.searchBookById(bookIdSearch);
+                                break;
+
+                            default:
+                                System.out.println("Invalid search option.");
+                        }
+                        break;
 
                 case 10:
                     System.out.println("...Goodbye!...");
