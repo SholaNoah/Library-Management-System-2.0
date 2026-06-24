@@ -344,5 +344,98 @@ public void loadData() {
     }
 }
 
+// Search for books by a specific title
+public void searchBookByTitle(String title) {
+    System.out.println("\n===== Search Results (Title Contains) =====");
+    boolean found = false;
+    String query = title.toLowerCase();
+
+    for (Book book : books) {
+        if (book.getTitle().toLowerCase().contains(query)) {
+            found = true;
+            book.displayDetails();
+            System.out.println();
+        }
+    }
+
+    if (!found) {
+        System.out.println("No books found matching that title.");
+    }
+}
+
+// Search for books by a specific author
+public void searchBookByAuthor(String author) {
+    System.out.println("\n===== Search Results (Author Contains) =====");
+    boolean found = false;
+    String query = author.toLowerCase();
+
+    for (Book book : books) {
+        if (book.getAuthor().toLowerCase().contains(query)) {
+            found = true;
+            book.displayDetails();
+            System.out.println();
+        }
+    }
+
+    if (!found) {
+        System.out.println("No books found matching that author.");
+    }
+}
+
+// Search for a student by their name
+public void searchStudent(String name) {
+    System.out.println("\n===== Student Search Results =====");
+    String query = name.toLowerCase();
+
+    Student student = null;
+
+    for (Student s : students) {
+        if (s.getName().toLowerCase().contains(query)) {
+            student = s;
+            break;
+        }
+    }
+
+    if (student == null) {
+        System.out.println("No student found matching that name.");
+        return;
+    }
+
+    student.displayDetails();
+    System.out.println("\nBorrowed Books:");
+
+    boolean hasBorrowed = false;
+
+    for (BorrowRecord record : borrowRecords) {
+        if (record.getStudent() == student && !record.isReturned()) {
+            hasBorrowed = true;
+            System.out.println("- " + record.getBook().getTitle() +
+                   " by " + record.getBook().getAuthor());
+            System.out.println("  Due: " + record.getDueDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+
+        }
+    }
+
+    if (!hasBorrowed) {
+        System.out.println("This student has no borrowed books.");
+    }
+}
+
+
+// Search for a book by its ID
+public void searchBookById(int id) {
+    System.out.println("\n===== Search Results (Book ID) =====");
+
+    Book book = findBookById(id);
+
+    if (book == null) {
+        System.out.println("No book found with that ID.");
+        return;
+    }
+
+    book.displayDetails();
+}
+
+
 
 }

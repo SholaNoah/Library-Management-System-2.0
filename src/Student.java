@@ -72,14 +72,6 @@ public void displayBorrowedBooks() {
 public void displayDetails() {
     System.out.println("Student ID: " + studentID);
     System.out.println("Name: " + name);
-    System.out.println("Borrowed Books:");
-    if (borrowedBooks.isEmpty()) {
-        System.out.println("None");
-    } else {
-        for (Book book : borrowedBooks) {
-            System.out.println("- " + book.getTitle() + " by " + book.getAuthor());
-        }
-    }
 }
 
 }
