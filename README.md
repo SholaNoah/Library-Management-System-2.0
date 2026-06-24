@@ -96,7 +96,7 @@ Borrowed Books: The Hobbit
 
 ## 📝 Future Improvements
 - Due dates & late fees  ✅
-- Search system (by title, author, student)  
+- Search system (by title, author, student) ✅
 - JSON or database storage  
 - GUI version (JavaFX or Swing)  
 
