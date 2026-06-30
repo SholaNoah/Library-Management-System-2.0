@@ -1,4 +1,5 @@
 📚 Library Management System (LBMS 3.0 – Java + MySQL)
+
 A fully upgraded Library Management System built in Java, now powered by a robust MySQL database backend.
 LBMS 3.0 introduces a complete architectural overhaul, replacing text‑file storage with persistent relational data, enabling real‑world scalability and reliability.
 
