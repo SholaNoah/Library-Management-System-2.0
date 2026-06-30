@@ -1,169 +1,148 @@
-📚 Library Management System (LBMS 3.0 – Java + MySQL)
-A fully upgraded Library Management System built in Java, now powered by a robust MySQL database backend.
+# 📚 Library Management System (LBMS 3.0 – Java + MySQL)
+
+A fully upgraded **Library Management System** built in Java, now powered by a robust **MySQL database backend**.  
 LBMS 3.0 introduces a complete architectural overhaul, replacing text‑file storage with persistent relational data, enabling real‑world scalability and reliability.
 
 This project demonstrates:
 
-Object‑oriented programming (OOP)
-
-DAO (Data Access Object) architecture
-
-MySQL database integration
-
-Real‑world library logic (borrowing, returning, availability, late fees)
-
-Data persistence across program restarts
-
-Clean separation of concerns (UI → Logic → Database)
+- Object‑oriented programming (OOP)
+- DAO (Data Access Object) architecture
+- MySQL database integration
+- Real‑world library logic (borrowing, returning, availability, late fees)
+- Data persistence across program restarts
+- Clean separation of concerns (UI → Logic → Database)
 
 LBMS has evolved from a simple file‑based system into a structured, database‑driven application.
 
-🚀 New in LBMS 3.0
-🗄️ MySQL Database Integration
+---
+
+## 🚀 New in LBMS 3.0
+
+### 🗄️ MySQL Database Integration
+
 LBMS now stores all data in MySQL tables:
 
-books
-
-students
-
-borrowed_books
-
-system
+- `books`
+- `students`
+- `borrowed_books`
+- `system`
 
 This upgrade provides:
 
-reliable persistence
+- reliable persistence
+- structured relational data
+- easier querying
+- safer updates
+- scalable storage
 
-structured relational data
+### 🧩 DAO Architecture
 
-easier querying
-
-safer updates
-
-scalable storage
-
-🧩 DAO Architecture
 All database operations are handled through dedicated DAO classes:
 
-BookDAO.java
-
-StudentDAO.java
-
-BorrowDAO.java
+- `BookDAO.java`
+- `StudentDAO.java`
+- `BorrowDAO.java`
 
 This ensures:
 
-cleaner code
+- cleaner code
+- easier maintenance
+- reusable database logic
+- proper separation of concerns
 
-easier maintenance
+### 💸 Late Fee System
 
-reusable database logic
-
-proper separation of concerns
-
-💸 Late Fee System
 LBMS now supports:
 
-due dates
+- due dates
+- late fee calculation
+- late fee storage in the database
+- late fee display during returns
 
-late fee calculation
+A new column `late_fee` was added to `borrowed_books` to support this feature.
 
-late fee storage in the database
+### 🔄 Borrow & Return Tracking (Database Version)
 
-late fee display during returns
-
-A new column late_fee was added to borrowed_books to support this feature.
-
-🔄 Borrow & Return Tracking (Database Version)
 Borrowing and returning books now updates:
 
-availability in books
-
-borrow status in borrowed_books
-
-return dates
-
-late fees
+- availability in `books`
+- borrow status in `borrowed_books`
+- return dates
+- late fees
 
 All operations are fully persistent.
 
-📥 Migration Support
+### 📥 Migration Support
+
 A migration script was created to import old LBMS 2.2 data into MySQL:
 
-students
-
-books
-
-borrowed records
-
-availability states
+- students
+- books
+- borrowed records
+- availability states
 
 This ensures continuity between versions.
 
-🔍 Improved Search System
+### 🔍 Improved Search System
+
 Search now works across:
 
-book titles
-
-authors
-
-student names
-
-borrowed records
+- book titles
+- authors
+- student names
+- borrowed records
 
 All powered by SQL queries.
 
-🧼 Fixed Menu Logic
-The main loop now exits correctly when selecting “Exit,” resolving the previous infinite loop issue.
+### 🧼 Fixed Menu Logic
 
-✨ Features
-📘 Book Management
-Add new books
+The main loop now exits correctly when selecting **“Exit”**, resolving the previous infinite loop issue.
 
-Auto‑generated book IDs (MySQL)
+---
 
-Track total & available copies
+## ✨ Features
 
-Display all books
+### 📘 Book Management
 
-👨‍🎓 Student Management
-Register students
+- Add new books
+- Auto‑generated book IDs (MySQL)
+- Track total & available copies
+- Display all books
 
-Auto‑generated student IDs
+### 👨‍🎓 Student Management
 
-View all students
+- Register students
+- Auto‑generated student IDs
+- View all students
 
-🔄 Borrowing & Returning
-Borrow books (only if available)
+### 🔄 Borrowing & Returning
 
-Return books
+- Borrow books (only if available)
+- Return books
+- Late fee calculation
+- Automatic availability updates
 
-Late fee calculation
+### 📊 Borrowed Book Records
 
-Automatic availability updates
+- View all borrowed books
+- Track borrow dates
+- Track return dates
+- Track late fees
 
-📊 Borrowed Book Records
-View all borrowed books
+### 🗄️ Persistent Storage (MySQL)
 
-Track borrow dates
-
-Track return dates
-
-Track late fees
-
-🗄️ Persistent Storage (MySQL)
 All data is stored in MySQL tables, ensuring:
 
-durability
+- durability
+- consistency
+- structured relationships
+- safe updates
 
-consistency
+---
 
-structured relationships
+## 📂 Project Structure
 
-safe updates
-
-📂 Project Structure
-Code
+```text
 /LibraryManagementSystem
 │── Book.java
 │── Student.java
@@ -178,48 +157,53 @@ Code
 │   ├── schema.sql
 │   └── migration.sql
 │── README.md
-🛠 How to Run
+```
+
+## 🛠 How to Run
 1. Set up MySQL
-Import the schema:
+- Import the schema:
 
-sql
-source schema.sql;
-(Optional) import migration data:
+- sql
+- source schema.sql;
+- (Optional) import migration data:
 
-sql
-source migration.sql;
+- sql
+- source migration.sql;
 2. Compile Java files
-bash
-javac *.java dao/*.java
+- bash
+- javac *.java dao/*.java
 3. Run the program
-bash
-java Main
-🧠 How Database Persistence Works
-When borrowing:
-A row is added to borrowed_books
+- bash
+- java Main
 
-available_copies decreases
+## 🧠 How Database Persistence Works
+When borrowing
+- A row is added to borrowed_books
 
-Status = Not Returned
+- available_copies decreases
 
-When returning:
-return_date is stored
+- Status = Not Returned
 
-Late fee is calculated
+When returning
+- return_date is stored
 
-Status becomes Returned
+- Late fee is calculated
 
-available_copies increases
+- Status becomes Returned
 
-When restarting:
-All data is loaded from MySQL
+- available_copies increases
 
-No more text files
+When restarting
+- All data is loaded from MySQL
 
-No more manual syncing
+- No more text files
 
-🧪 Example Output
-Code
+- No more manual syncing
+
+---
+
+## 🧪 Example Output
+```text
 =========📖 Books 📖=========
 ID: 110
 Title: A Gentleman in Moscow
@@ -231,23 +215,26 @@ Student ID: 16
 Name: Marie
 Borrowed Books: Recursion, A Gentleman in Moscow
 Late Fees: 0
-📝 Future Improvements
-Category filtering
+```
+---
 
-ISBN support
+## 📝 Future Improvements
+- Category filtering
 
-Overdue book notifications
+- ISBN support
 
-Admin login system
+- Overdue book notifications
 
-Web dashboard (Spring Boot)
+- Admin login system
 
-GUI version (JavaFX)
+- Web dashboard (Spring Boot)
 
-👤 Author
+- GUI version (JavaFX)
+
+## 👤 Author
 Al‑Mustapha (Shankz)  
 Java Developer | Writer | Creator
 
-⭐ License
+## ⭐ License
 This project is open‑source.
 Feel free to fork, modify, and improve it.
