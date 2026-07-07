@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="10" styleClass="root" xmlns:fx="http://javafx.com/fxml" fx:controller="controllers.BooksController">
+
+    <HBox spacing="10" styleClass="toolbar">
+        <Button text="⬅ Back" fx:id="backButton"/>
+        <Button text="🏠 Dashboard" fx:id="dashboardButton"/>
+        <Button text="Add Book" fx:id="addBookButton"/>
+        <Button text="Refresh" fx:id="refreshButton"/>
+    </HBox>
+
+    <TableView fx:id="booksTable" prefHeight="400">
+        <columns>
+            <TableColumn fx:id="idColumn" text="ID" prefWidth="50"/>
+            <TableColumn fx:id="titleColumn" text="Title" prefWidth="200"/>
+            <TableColumn fx:id="authorColumn" text="Author" prefWidth="150"/>
+            <TableColumn fx:id="availableColumn" text="Available" prefWidth="100"/>
+        </columns>
+    </TableView>
+
+</VBox>
