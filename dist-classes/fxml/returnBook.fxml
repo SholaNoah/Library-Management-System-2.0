@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="10" styleClass="root" xmlns:fx="http://javafx.com/fxml" fx:controller="controllers.ReturnController">
+
+    <HBox spacing="10" styleClass="toolbar">
+        <Button text="⬅ Back" fx:id="backButton"/>
+        <Button text="🏠 Dashboard" fx:id="dashboardButton"/>
+        <Button text="Return Selected" fx:id="returnButton"/>
+        <Button text="Refresh" fx:id="refreshButton"/>
+    </HBox>
+
+    <Label text="Currently Borrowed Books" styleClass="title-label" style="-fx-padding: 10 0 0 15;"/>
+
+    <TableView fx:id="borrowedTable" prefHeight="400">
+        <columns>
+            <TableColumn fx:id="studentColumn" text="Student" prefWidth="200"/>
+            <TableColumn fx:id="bookColumn" text="Book" prefWidth="250"/>
+            <TableColumn fx:id="dueDateColumn" text="Due Date" prefWidth="150"/>
+        </columns>
+    </TableView>
+
+    <Label fx:id="statusLabel" style="-fx-padding: 0 0 10 15;"/>
+
+</VBox>

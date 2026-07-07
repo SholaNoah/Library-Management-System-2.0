@@ -1,8 +1,9 @@
 {
-    "java.project.sourcePaths": ["src"],
+    "java.project.sourcePaths": ["src/main/java", "src/main/resources"],
     "java.project.outputPath": "bin",
     "java.project.referencedLibraries": [
         "lib/**/*.jar",
-        "lib/mysql-connector-j-9.7.0.jar"
+        "lib/mysql-connector-j-9.7.0.jar",
+        "C:/Users/Hydra/Documents/Java Project/javafx-sdk-21.0.11/lib/*.jar"
     ]
 }

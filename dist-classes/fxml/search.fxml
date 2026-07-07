@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox spacing="15" styleClass="root" xmlns:fx="http://javafx.com/fxml" fx:controller="controllers.SearchController">
+
+    <HBox spacing="10" styleClass="toolbar">
+        <Button text="⬅ Back" fx:id="backButton"/>
+        <Button text="🏠 Dashboard" fx:id="dashboardButton"/>
+    </HBox>
+
+    <VBox spacing="15">
+        <padding>
+            <Insets top="20" right="40" bottom="10" left="40"/>
+        </padding>
+
+        <Label text="Search" styleClass="title-label"/>
+
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <Label text="Search by:"/>
+            <ComboBox fx:id="searchTypeComboBox" prefWidth="180"/>
+            <TextField fx:id="searchField" prefWidth="300" promptText="Enter search term..."/>
+            <Button text="Search" fx:id="searchButton"/>
+        </HBox>
+
+        <Label fx:id="statusLabel"/>
+    </VBox>
+
+    <TableView fx:id="booksResultTable" prefHeight="350" visible="false" managed="false">
+        <columns>
+            <TableColumn fx:id="bookIdColumn" text="ID" prefWidth="50"/>
+            <TableColumn fx:id="bookTitleColumn" text="Title" prefWidth="250"/>
+            <TableColumn fx:id="bookAuthorColumn" text="Author" prefWidth="200"/>
+            <TableColumn fx:id="bookAvailableColumn" text="Available" prefWidth="100"/>
+        </columns>
+    </TableView>
+
+    <TableView fx:id="studentsResultTable" prefHeight="350" visible="false" managed="false">
+        <columns>
+            <TableColumn fx:id="studentIdColumn" text="ID" prefWidth="80"/>
+            <TableColumn fx:id="studentNameColumn" text="Name" prefWidth="300"/>
+        </columns>
+    </TableView>
+
+</VBox>

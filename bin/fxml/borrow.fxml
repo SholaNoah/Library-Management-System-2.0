@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox spacing="20" styleClass="root" xmlns:fx="http://javafx.com/fxml" fx:controller="controllers.BorrowController">
+
+    <HBox spacing="10" styleClass="toolbar">
+        <Button text="⬅ Back" fx:id="backButton"/>
+        <Button text="🏠 Dashboard" fx:id="dashboardButton"/>
+    </HBox>
+
+    <VBox spacing="15" alignment="TOP_LEFT">
+        <padding>
+            <Insets top="20" right="40" bottom="20" left="40"/>
+        </padding>
+
+        <Label text="Borrow a Book" styleClass="title-label"/>
+
+        <GridPane hgap="15" vgap="15">
+            <Label text="Student:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+            <ComboBox fx:id="studentComboBox" prefWidth="300" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+            <Label text="Book:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+            <ComboBox fx:id="bookComboBox" prefWidth="300" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+        </GridPane>
+
+        <Button text="Borrow Book" fx:id="borrowButton" styleClass="button"/>
+
+        <Label fx:id="statusLabel" wrapText="true"/>
+    </VBox>
+
+</VBox>
