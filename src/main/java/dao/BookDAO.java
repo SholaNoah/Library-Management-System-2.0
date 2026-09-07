@@ -142,4 +142,41 @@ public class BookDAO {
 
         return list;
     }
+
+    // Update an existing book's details
+    public void updateBook(Book book) {
+    String sql = "UPDATE books SET title = ?, author = ? WHERE book_id = ?";
+
+    try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+        stmt.setString(1, book.getTitle());
+        stmt.setString(2, book.getAuthor());
+        stmt.setInt(3, book.getBookID());
+        stmt.executeUpdate();
+
+        System.out.println("Book updated: " + book.getTitle());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Delete a book by ID
+    public void deleteBook(int bookId) {
+        String sql = "DELETE FROM books WHERE book_id = ?";
+
+        try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+            PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, bookId);
+            stmt.executeUpdate();
+
+            System.out.println("Book deleted, ID: " + bookId);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }

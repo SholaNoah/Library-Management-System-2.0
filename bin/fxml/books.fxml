@@ -9,10 +9,12 @@
         <Button text="⬅ Back" fx:id="backButton"/>
         <Button text="🏠 Dashboard" fx:id="dashboardButton"/>
         <Button text="Add Book" fx:id="addBookButton"/>
+        <Button text="Edit Selected" fx:id="editBookButton"/>
+        <Button text="Delete Selected" fx:id="deleteBookButton"/>
         <Button text="Refresh" fx:id="refreshButton"/>
     </HBox>
 
-    <TableView fx:id="booksTable" prefHeight="400">
+    <TableView fx:id="booksTable" VBox.vgrow="ALWAYS">
         <columns>
             <TableColumn fx:id="idColumn" text="ID" prefWidth="50"/>
             <TableColumn fx:id="titleColumn" text="Title" prefWidth="200"/>

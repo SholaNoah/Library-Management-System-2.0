@@ -13,6 +13,7 @@
             <Button text="Students" fx:id="studentsButton"/>
             <Button text="Borrow" fx:id="borrowButton"/>
             <Button text="Return" fx:id="returnButton"/>
+            <Button text="Fees" fx:id="feesButton"/>
             <Button text="Search" fx:id="searchButton"/>
         </ToolBar>
     </top>
@@ -43,6 +44,11 @@
                     <Label text="Currently Borrowed" styleClass="stat-label"/>
                     <Label fx:id="activeBorrowsLabel" text="—" styleClass="stat-value"/>
                 </VBox>
+
+                <VBox fx:id="overdueCard" styleClass="stat-card" alignment="CENTER" spacing="8">
+                    <Label text="Books Overdue" styleClass="stat-label"/>
+                    <Label fx:id="overdueCountLabel" text="—" styleClass="stat-value"/>
+                </VBox>
             </HBox>
 
             <HBox spacing="20" alignment="CENTER">
@@ -51,7 +57,7 @@
                     <Label fx:id="mostBorrowedBookLabel" text="—" styleClass="stat-value-small"/>
                 </VBox>
 
-                <VBox styleClass="stat-card-wide" alignment="CENTER_LEFT" spacing="8">
+                <VBox fx:id="activeStudentCard" styleClass="stat-card-wide" alignment="CENTER_LEFT" spacing="8">
                     <Label text="🏅 Most Active Student" styleClass="stat-label"/>
                     <Label fx:id="mostActiveStudentLabel" text="—" styleClass="stat-value-small"/>
                 </VBox>
