@@ -4,10 +4,11 @@ A JavaFX desktop application for managing a library's books, students, and borro
 
 ## Features
 
-- **Dashboard** — live stats (total books, total students, currently borrowed, most borrowed book, most active student)
+- **Dashboard** — live stats (total books, total students, currently borrowed, most borrowed book, most active student, books overdue)
 - **Books** — view, add, and refresh the book catalog
 - **Students** — view, add, and refresh registered students
 - **Borrow** — select a student and an available book to check it out
+- **Fees** — view fees paid by students
 - **Return** — view currently borrowed books, return one, and see any late fee due
 - **Search** — look up books by title or ID, or students by name
 - Auto-starts the MySQL80 Windows service on launch (requires admin elevation)
