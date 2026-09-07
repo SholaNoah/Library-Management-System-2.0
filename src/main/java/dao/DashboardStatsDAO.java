@@ -85,4 +85,13 @@ public class DashboardStatsDAO {
 
         return 0;
     }
+
+    public int getOverdueCount() {
+    String sql = """
+        SELECT COUNT(*) FROM borrowed_books
+        WHERE status = 'Not Returned'
+        AND DATE_ADD(borrow_date, INTERVAL 14 DAY) < CURRENT_DATE
+    """;
+    return runCountQuery(sql);
+    }
 }

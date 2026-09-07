@@ -101,4 +101,39 @@ public class StudentDAO {
 
         return list;
     }
+
+    // Update an existing student's details
+    public void updateStudent(Student student) {
+        String sql = "UPDATE students SET student_name = ? WHERE student_id = ?";
+
+        try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+            PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, student.getName());
+            stmt.setInt(2, student.getStudentID());
+            stmt.executeUpdate();
+
+            System.out.println("Student updated: " + student.getName());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Delete a student by ID
+    public void deleteStudent(int studentId) {
+        String sql = "DELETE FROM students WHERE student_id = ?";
+
+        try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+            PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, studentId);
+            stmt.executeUpdate();
+
+            System.out.println("Student deleted, ID: " + studentId);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

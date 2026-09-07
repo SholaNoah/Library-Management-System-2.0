@@ -20,6 +20,8 @@ public class BooksController {
     @FXML private TableColumn<Book, Boolean> availableColumn;
 
     @FXML private Button addBookButton;
+    @FXML private Button editBookButton;
+    @FXML private Button deleteBookButton;
     @FXML private Button refreshButton;
     @FXML private Button backButton;
     @FXML private Button dashboardButton;
@@ -34,6 +36,8 @@ public class BooksController {
         availableColumn.setCellValueFactory(new PropertyValueFactory<>("available"));
 
         addBookButton.setOnAction(e -> handleAddBook());
+        editBookButton.setOnAction(e -> handleEditBook());
+        deleteBookButton.setOnAction(e -> handleDeleteBook());
         refreshButton.setOnAction(e -> loadBooks());
         backButton.setOnAction(e -> SceneManager.goBack());
         dashboardButton.setOnAction(e -> SceneManager.goToDashboard());
@@ -47,17 +51,72 @@ public class BooksController {
     }
 
     private void handleAddBook() {
-        Dialog<Book> dialog = new Dialog<>();
-        dialog.setTitle("Add Book");
-        dialog.setHeaderText("Enter the new book's details");
+        Dialog<Book> dialog = buildBookDialog("Add Book", null);
+        Optional<Book> result = dialog.showAndWait();
+        result.ifPresent(book -> {
+            if (!book.getTitle().isBlank() && !book.getAuthor().isBlank()) {
+                bookDAO.addBook(book);
+                loadBooks();
+            }
+        });
+    }
 
-        ButtonType addButtonType = new ButtonType("Add", ButtonBar.ButtonData.OK_DONE);
-        dialog.getDialogPane().getButtonTypes().addAll(addButtonType, ButtonType.CANCEL);
+    private void handleEditBook() {
+        Book selected = booksTable.getSelectionModel().getSelectedItem();
+
+        if (selected == null) {
+            showAlert("No book selected", "Please select a book to edit.");
+            return;
+        }
+
+        Dialog<Book> dialog = buildBookDialog("Edit Book", selected);
+        Optional<Book> result = dialog.showAndWait();
+        result.ifPresent(updatedBook -> {
+            if (!updatedBook.getTitle().isBlank() && !updatedBook.getAuthor().isBlank()) {
+                bookDAO.updateBook(updatedBook);
+                loadBooks();
+            }
+        });
+    }
+
+    private void handleDeleteBook() {
+        Book selected = booksTable.getSelectionModel().getSelectedItem();
+
+        if (selected == null) {
+            showAlert("No book selected", "Please select a book to delete.");
+            return;
+        }
+
+        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+        confirm.setTitle("Delete Book");
+        confirm.setHeaderText("Delete \"" + selected.getTitle() + "\"?");
+        confirm.setContentText("This cannot be undone.");
+
+        Optional<ButtonType> result = confirm.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            bookDAO.deleteBook(selected.getBookID());
+            loadBooks();
+        }
+    }
+
+    // Shared dialog builder for both Add and Edit — prefilled if editing an existing book
+    private Dialog<Book> buildBookDialog(String title, Book existing) {
+        Dialog<Book> dialog = new Dialog<>();
+        dialog.setTitle(title);
+        dialog.setHeaderText(existing == null ? "Enter the new book's details" : "Update the book's details");
+
+        ButtonType confirmButtonType = new ButtonType(existing == null ? "Add" : "Save", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(confirmButtonType, ButtonType.CANCEL);
 
         TextField titleField = new TextField();
         titleField.setPromptText("Title");
         TextField authorField = new TextField();
         authorField.setPromptText("Author");
+
+        if (existing != null) {
+            titleField.setText(existing.getTitle());
+            authorField.setText(existing.getAuthor());
+        }
 
         GridPane grid = new GridPane();
         grid.setHgap(10);
@@ -70,18 +129,21 @@ public class BooksController {
         dialog.getDialogPane().setContent(grid);
 
         dialog.setResultConverter(buttonType -> {
-            if (buttonType == addButtonType) {
-                return new Book(0, titleField.getText(), authorField.getText());
+            if (buttonType == confirmButtonType) {
+                int id = existing == null ? 0 : existing.getBookID();
+                return new Book(id, titleField.getText(), authorField.getText());
             }
             return null;
         });
 
-        Optional<Book> result = dialog.showAndWait();
-        result.ifPresent(book -> {
-            if (!book.getTitle().isBlank() && !book.getAuthor().isBlank()) {
-                bookDAO.addBook(book);
-                loadBooks();
-            }
-        });
+        return dialog;
+    }
+
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }

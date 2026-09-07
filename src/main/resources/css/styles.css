@@ -93,3 +93,14 @@
     -fx-font-weight: 600;
     -fx-text-fill: #312e81;
 }
+
+.stat-card:hover, .stat-card-wide:hover {
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(79,70,229,0.30), 16, 0, 0, 6);
+}
+
+.stat-value-alert {
+    -fx-font-size: 32px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #dc2626;
+}

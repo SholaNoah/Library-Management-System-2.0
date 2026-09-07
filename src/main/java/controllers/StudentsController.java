@@ -18,6 +18,8 @@ public class StudentsController {
     @FXML private TableColumn<Student, String> nameColumn;
 
     @FXML private Button addStudentButton;
+    @FXML private Button editStudentButton;
+    @FXML private Button deleteStudentButton;
     @FXML private Button refreshButton;
     @FXML private Button backButton;
     @FXML private Button dashboardButton;
@@ -30,6 +32,8 @@ public class StudentsController {
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
 
         addStudentButton.setOnAction(e -> handleAddStudent());
+        editStudentButton.setOnAction(e -> handleEditStudent());
+        deleteStudentButton.setOnAction(e -> handleDeleteStudent());
         refreshButton.setOnAction(e -> loadStudents());
         backButton.setOnAction(e -> SceneManager.goBack());
         dashboardButton.setOnAction(e -> SceneManager.goToDashboard());
@@ -43,15 +47,68 @@ public class StudentsController {
     }
 
     private void handleAddStudent() {
-        Dialog<Student> dialog = new Dialog<>();
-        dialog.setTitle("Add Student");
-        dialog.setHeaderText("Enter the new student's details");
+        Dialog<Student> dialog = buildStudentDialog("Add Student", null);
+        Optional<Student> result = dialog.showAndWait();
+        result.ifPresent(student -> {
+            if (!student.getName().isBlank()) {
+                studentDAO.addStudent(student);
+                loadStudents();
+            }
+        });
+    }
 
-        ButtonType addButtonType = new ButtonType("Add", ButtonBar.ButtonData.OK_DONE);
-        dialog.getDialogPane().getButtonTypes().addAll(addButtonType, ButtonType.CANCEL);
+    private void handleEditStudent() {
+        Student selected = studentsTable.getSelectionModel().getSelectedItem();
+
+        if (selected == null) {
+            showAlert("No student selected", "Please select a student to edit.");
+            return;
+        }
+
+        Dialog<Student> dialog = buildStudentDialog("Edit Student", selected);
+        Optional<Student> result = dialog.showAndWait();
+        result.ifPresent(updatedStudent -> {
+            if (!updatedStudent.getName().isBlank()) {
+                studentDAO.updateStudent(updatedStudent);
+                loadStudents();
+            }
+        });
+    }
+
+    private void handleDeleteStudent() {
+        Student selected = studentsTable.getSelectionModel().getSelectedItem();
+
+        if (selected == null) {
+            showAlert("No student selected", "Please select a student to delete.");
+            return;
+        }
+
+        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+        confirm.setTitle("Delete Student");
+        confirm.setHeaderText("Delete \"" + selected.getName() + "\"?");
+        confirm.setContentText("This cannot be undone.");
+
+        Optional<ButtonType> result = confirm.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            studentDAO.deleteStudent(selected.getStudentID());
+            loadStudents();
+        }
+    }
+
+    private Dialog<Student> buildStudentDialog(String title, Student existing) {
+        Dialog<Student> dialog = new Dialog<>();
+        dialog.setTitle(title);
+        dialog.setHeaderText(existing == null ? "Enter the new student's details" : "Update the student's details");
+
+        ButtonType confirmButtonType = new ButtonType(existing == null ? "Add" : "Save", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(confirmButtonType, ButtonType.CANCEL);
 
         TextField nameField = new TextField();
         nameField.setPromptText("Full Name");
+
+        if (existing != null) {
+            nameField.setText(existing.getName());
+        }
 
         GridPane grid = new GridPane();
         grid.setHgap(10);
@@ -62,18 +119,21 @@ public class StudentsController {
         dialog.getDialogPane().setContent(grid);
 
         dialog.setResultConverter(buttonType -> {
-            if (buttonType == addButtonType) {
-                return new Student(0, nameField.getText());
+            if (buttonType == confirmButtonType) {
+                int id = existing == null ? 0 : existing.getStudentID();
+                return new Student(id, nameField.getText());
             }
             return null;
         });
 
-        Optional<Student> result = dialog.showAndWait();
-        result.ifPresent(student -> {
-            if (!student.getName().isBlank()) {
-                studentDAO.addStudent(student);
-                loadStudents();
-            }
-        });
+        return dialog;
+    }
+
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }

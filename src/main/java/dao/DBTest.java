@@ -6,7 +6,7 @@ public class DBTest {
     public static void main(String[] args) {
         try {
             Connection conn = DriverManager.getConnection(
-                "jdbc:mysql://localhost:3306/library_db",
+                "jdbc:mysql://localhost:3306/library_db?useSSL=false&allowPublicKeyRetrieval=true",
                 "root",
                 "head2head1amthebe$t"
             );

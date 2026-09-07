@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="10" styleClass="root" xmlns:fx="http://javafx.com/fxml" fx:controller="controllers.FeesController">
+
+    <HBox spacing="10" styleClass="toolbar">
+        <Button text="⬅ Back" fx:id="backButton"/>
+        <Button text="🏠 Dashboard" fx:id="dashboardButton"/>
+        <Button text="Refresh" fx:id="refreshButton"/>
+    </HBox>
+
+    <Label text="Late Fee History" styleClass="title-label" style="-fx-padding: 10 0 0 15;"/>
+
+   <TableView fx:id="feesTable" VBox.vgrow="ALWAYS">
+    <columns>
+        <TableColumn fx:id="studentColumn" text="Student" prefWidth="180"/>
+        <TableColumn fx:id="bookColumn" text="Book" prefWidth="220"/>
+        <TableColumn fx:id="borrowDateColumn" text="Borrowed On" prefWidth="120"/>
+        <TableColumn fx:id="feeColumn" text="Fee (£)" prefWidth="90"/>
+        <TableColumn fx:id="returnDateColumn" text="Returned On" prefWidth="120"/>
+    </columns>
+</TableView>
+
+    <Label fx:id="totalLabel" style="-fx-padding: 5 0 10 15; -fx-font-weight: bold;"/>
+
+</VBox>
